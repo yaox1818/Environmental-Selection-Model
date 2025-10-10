@@ -14,7 +14,7 @@ import utils.random.MathUtil;
 import org.apache.commons.cli.Option.Builder;
 
 
-public class TestE extends Microbiosima {
+public class EnvironmentalMicrobiosima extends Microbiosima {
 
     private static final String VERSION = "2.0";
 
@@ -24,7 +24,7 @@ public class TestE extends Microbiosima {
      * @throws java.io.FileNotFoundException
      * @throws java.io.UnsupportedEncodingException
      */
-//修改过k的取值范围
+
 
     /**
      将k的过程修改成了一个方法，并且不用每次进行计算，直接继承的k之后的fitness
@@ -44,6 +44,7 @@ public class TestE extends Microbiosima {
         double msCoeffInEnv=1;
         double hsCoeff=1;
         boolean HMS_or_TMS=false;
+        boolean kIndex=false;
 
 
 
@@ -52,8 +53,10 @@ public class TestE extends Microbiosima {
         Option help = new Option("h", "help", false, "print this message");
         Option version = new Option("v", "version", false,
                 "print the version information and exit");
+        Option K = new Option("k", false, "use resource provisioning process");
         options.addOption(help);
         options.addOption(version);
+        options.addOption(K);
 
         options.addOption(Option.builder("o").longOpt("obs").hasArg()
                 .argName("OBS").desc("Number generation for observation [default: 100]")
@@ -61,6 +64,7 @@ public class TestE extends Microbiosima {
         options.addOption(Option.builder("r").longOpt("rep").hasArg()
                 .argName("REP").desc("Number of replication [default: 1]")
                 .build());
+
 
         Builder C = Option.builder("c").longOpt("config")
                 .numberOfArgs(6).argName("Pop Micro Spec Gen")
@@ -95,6 +99,9 @@ public class TestE extends Microbiosima {
             if(cmd.hasOption("v")){
                 System.out.println("Microbiosima "+VERSION);
                 System.exit(0);
+            }
+            if(cmd.hasOption("k")){
+                kIndex=true;
             }
             if (pct_config.length != 6){
                 System.out.println("ERROR! Required exactly five argumennts for pct_env, pct_pool, msCoeff, hsCoeff and HMS_or_TMS. It got "
@@ -206,7 +213,7 @@ public class TestE extends Microbiosima {
                 sufix = "_E" + pctEnv + "_P" + pctPool +"_HS"+hsCoeff+"_HMS"+ msCoeffInHost+"_EMS"+ msCoeffInEnv +".txt";
             else
                 sufix = "_E" + pctEnv + "_P" + pctPool +"_HS"+hsCoeff+"_TMS"+ msCoeffInHost+"_EMS"+ msCoeffInEnv +".txt";
-            System.out.println("Output 5 result files in the format of: "+prefix+"[****]" +sufix);
+            System.out.println("Output 18 result files in the format of: "+prefix+"[****]" +sufix);
             try{
                 PrintWriter file1= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"gamma_diversity"+sufix)));
                 PrintWriter file2= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"alpha_diversity"+sufix)));
@@ -221,10 +228,12 @@ public class TestE extends Microbiosima {
                 PrintWriter file11= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"bacteria_contents"+sufix)));
                 PrintWriter file12= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"individual_bacteria_contents"+sufix)));
                 PrintWriter file13= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"k"+sufix)));
-                PrintWriter file14= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"environmental_alpha_diversity"+sufix)));
+                PrintWriter file14= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"alpha_diversity_in_env"+sufix)));
                 PrintWriter file15= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"environmental_bacteria_contents_for_host"+sufix)));
                 PrintWriter file16= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"environmental_bacteria_contents_for_env"+sufix)));
                 PrintWriter file17= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"microbiome_fitness_in_environment_distribution"+sufix)));
+                PrintWriter file18= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"beta_diversity_between_hosts_and_env"+sufix)));
+                PrintWriter file19= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"gamma_diversity_in_hosts_and_env"+sufix)));
                 for (int i=0;i<Ngene;i++){
                     fitnessToMicrobeInHost[i]=MathUtil.getNextInt(2)-1;//随机分配微生物的25种性状数值-1、0、1.
                     fitnessToMicrobeInEnv[i]=MathUtil.getNextInt(2)-1;//随机分配微生物的25种性状数值-1、0、1.
@@ -234,7 +243,7 @@ public class TestE extends Microbiosima {
                 //SelectiveSpeciesRegistry根据微生物种类，性状总数，每个微生物性状总数，sm参数等赋予了每种OTU性状，并记录到geneCompositionRecords中
                 SelectiveSpeciesRegistry ssr=new SelectiveSpeciesRegistry(numberOfSpecies,Ngene, Ngenepm, msCoeffInHost,msCoeffInEnv,fitnessToHost,fitnessToMicrobeInHost,fitnessToMicrobeInEnv);
                 MathUtil.setSeed();//?
-                SelectivePopulationE population=new SelectivePopulationE(microSize, environment, populationSize, pctEnv , pctPool,0,0,ssr,hsCoeff,HMS_or_TMS);
+                SelectivePopulationE population=new SelectivePopulationE(microSize, environment, populationSize, pctEnv , pctPool,0,0,ssr,hsCoeff,HMS_or_TMS,kIndex);
 
                 while (population.getNumberOfGeneration()<numberOfGeneration){
                     population.sumSpecies();
@@ -263,6 +272,8 @@ public class TestE extends Microbiosima {
                         file14.println(population.alphaDiversityInEnvironment());
                         file15.println(population.printBacteriaContentsInEnvForHost());
                         file16.println(population.printBacteriaContentsInEnv());
+                        file18.println(population.BrayCurtisBetweenHostandEnv(true));
+                        file19.println(population.gammaDiversityInEnvironmentandHosts(true));
                     }
                     population.getNextGen();
                 }
@@ -286,6 +297,8 @@ public class TestE extends Microbiosima {
                 file15.close();
                 file16.close();
                 file17.close();
+                file18.close();
+                file19.close();
 
             }catch (IOException e) {
                 e.printStackTrace();

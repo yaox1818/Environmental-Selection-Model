@@ -20,6 +20,8 @@ public class SelectivePopulationE extends Population{
     
     private SelectiveIndividualE[] compositionOfIndividuals;
     private SelectiveSpeciesRegistry selSpReg;
+    private int numberOfSamples;
+    private int sampleReplicates;
 	
     double hsCoef;
     private double averageHF;
@@ -40,10 +42,13 @@ public class SelectivePopulationE extends Population{
     double[] parentalK;
 
     private double a_diversityInEnvironment;
+    private double weighted_b_diversityInEnvironment;
+    private double g_diversityInEnvironmentandHosts;
 
-	
-    
-    public SelectivePopulationE(int numberOfMicrobePerHost, double[] environment, int noOfIndividual, double environmentalFactor, double pooledOrFiexd, int numberOfSamples, int sampleReplicates0, SelectiveSpeciesRegistry ssr, double hostSelectionCoef, boolean HMS_or_TMS) throws IOException {
+
+
+
+    public SelectivePopulationE(int numberOfMicrobePerHost, double[] environment, int noOfIndividual, double environmentalFactor, double pooledOrFiexd, int numberOfSamples, int sampleReplicates0, SelectiveSpeciesRegistry ssr, double hostSelectionCoef, boolean HMS_or_TMS, boolean kIndex) throws IOException {
             super(numberOfMicrobePerHost, environment, noOfIndividual, environmentalFactor, pooledOrFiexd, numberOfSamples, sampleReplicates0);
             compositionOfIndividuals = new SelectiveIndividualE[numberOfIndividual];
             fitnessList=new double[numberOfIndividual];
@@ -65,10 +70,12 @@ public class SelectivePopulationE extends Population{
             ssr.getFitness(microFitnessInEnv,ssr.mfrE);
             ssr.getFitness(microFitnessInHost,hostFitness, ssr.hfr, ssr.mfrH);
             for (int i=0;i<numberOfIndividual;i++){
-                compositionOfIndividuals[i]=new SelectiveIndividualE(multiNomialDist,numberOfMicrobePerHost,numberOfEnvironmentalSpecies,ssr,HMS_or_TMS);
+                compositionOfIndividuals[i]=new SelectiveIndividualE(multiNomialDist,numberOfMicrobePerHost,numberOfEnvironmentalSpecies,ssr,HMS_or_TMS,kIndex);
                 //生成一系列个体，包括个体的hostfitness，个体对各种out的额fitness，各种otu在宿主体内的fitness
                 fitnessList[i]=compositionOfIndividuals[i].getHostFitness(0);//记录每一个宿主个体的average score,取值-1到1.
-            }           
+            }
+            this.numberOfSamples=numberOfSamples;
+            this.sampleReplicates=sampleReplicates0;
         }
     
     @Override
@@ -217,10 +224,105 @@ public class SelectivePopulationE extends Population{
     }
 
     public double alphaDiversityInEnvironment() {
+        double[] environmentalMicribiome;
+        if (getNumberOfGeneration() == 0){
+            environmentalMicribiome=initialEnvironment;
+        } else {
+            environmentalMicribiome=environmentalContribution;
+        }
         a_diversityInEnvironment = 0;
-        a_diversityInEnvironment+= DiversityIndex.shannonWienerIndex(environmentalContribution);
+        a_diversityInEnvironment+= DiversityIndex.shannonWienerIndex(environmentalMicribiome);
         return a_diversityInEnvironment;
     }
+
+    public double BrayCurtisBetweenHostandEnv(boolean sampleOrNot) {
+        double coef0 = 2.0/2.0/(2.0-1.0);
+        double coef1 = 2.0/2.0/(2.0-1.0)/sampleReplicates;
+        weighted_b_diversityInEnvironment=0;
+        double[] environmentalMicribiome;
+        if (getNumberOfGeneration() == 0){
+            environmentalMicribiome=initialEnvironment;
+        } else {
+            environmentalMicribiome=environmentalContribution;
+        }
+        if (sampleOrNot){
+            weighted_b_diversityInEnvironment = DiversityIndex.BrayCurtis(microbiomeSum, environmentalMicribiome);
+            weighted_b_diversityInEnvironment*=coef0;
+        }
+        else{
+            double[] temp_microbiomesSum = new double[microbiomeSum.length];
+            for (int index=0;index<sampleReplicates;index++){
+                double[][] temp_microbiomes=sample(index);
+                for (int i =0;i<temp_microbiomes.length;i++){
+                    for (int j=0;j<temp_microbiomes[i].length;j++){
+                        temp_microbiomesSum[j]+=temp_microbiomes[i][j];
+                    }
+                }
+                weighted_b_diversityInEnvironment += DiversityIndex.BrayCurtis(temp_microbiomesSum, environmentalMicribiome);
+            }
+            weighted_b_diversityInEnvironment *= coef1;
+        }
+        return weighted_b_diversityInEnvironment;
+    }
+
+    public double betaDiversityBetweenHostandEnv(boolean sampleOrNot) {
+        double coef0 = 2.0/2.0/(2.0-1.0);
+        double coef1 = 2.0/2.0/(2.0-1.0)/sampleReplicates;
+        weighted_b_diversityInEnvironment=0;
+        double[] environmentalMicribiome;
+        if (getNumberOfGeneration() == 0){
+            environmentalMicribiome=initialEnvironment;
+        } else {
+            environmentalMicribiome=environmentalContribution;
+        }
+        if (sampleOrNot){
+            weighted_b_diversityInEnvironment = DiversityIndex.PiIndex(microbiomeSum, environmentalMicribiome);
+            weighted_b_diversityInEnvironment*=coef0;
+        }
+        else{
+            double[] temp_microbiomesSum = new double[numberOfEnvironmentalSpecies];
+            for (int index=0;index<sampleReplicates;index++){
+                double[][] temp_microbiomes=sample(index);
+                for (int i =0;i<temp_microbiomes.length;i++){
+                    for (int j=0;j<temp_microbiomes[i].length;j++){
+                        temp_microbiomesSum[j]+=temp_microbiomes[i][j];
+                    }
+                }
+                weighted_b_diversityInEnvironment += DiversityIndex.PiIndex(temp_microbiomesSum, environmentalMicribiome);
+            }
+            weighted_b_diversityInEnvironment *= coef1;
+        }
+        return weighted_b_diversityInEnvironment;
+    }
+
+    public double gammaDiversityInEnvironmentandHosts(boolean sampleOrNot) {
+        g_diversityInEnvironmentandHosts=0;
+        double[] microbiomeEnvironmentandHosts = new double[numberOfEnvironmentalSpecies];
+        double[] environmentalMicribiome;
+        if (getNumberOfGeneration() == 0){
+            environmentalMicribiome=initialEnvironment;
+        } else {
+            environmentalMicribiome=environmentalContribution;
+        }
+
+        if (sampleOrNot) {
+            for (int i=0;i<numberOfEnvironmentalSpecies;i++){
+                microbiomeEnvironmentandHosts[i]= (microbiomeSum[i]+environmentalMicribiome[i])/2.0;
+            }
+            g_diversityInEnvironmentandHosts = DiversityIndex.shannonWienerIndex(microbiomeEnvironmentandHosts);
+        } else {
+            for(int index=0;index<sampleReplicates;index++){
+                double[] temp_sum=pooledSample(index);
+                for (int i=0;i<microbiomeEnvironmentandHosts.length;i++){
+                    microbiomeEnvironmentandHosts[i] = (temp_sum[i]+environmentalMicribiome[i])/2.0;
+                }
+                g_diversityInEnvironmentandHosts+=DiversityIndex.shannonWienerIndex(microbiomeEnvironmentandHosts);
+            }
+            g_diversityInEnvironmentandHosts = g_diversityInEnvironmentandHosts / sampleReplicates;
+        }
+        return g_diversityInEnvironmentandHosts;
+    }
+
 
     public double[]  divideBacteriaForHost(){
         double[] bacteriaClass=new double[3];

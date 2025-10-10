@@ -53,12 +53,12 @@ public class Microbiosima {
 	public static void main(String[] args) throws FileNotFoundException,
 			UnsupportedEncodingException {
 		//Init with default values
-		int populationSize = 500;         //宿主群落大小
-		int microSize = 1000;             //宿主体内微生物数量
-		int numberOfSpecies = 150;        //微生物种类数量
-		int numberOfGeneration = 10000;   //宿主代数
-		int numberOfObservation = 100;    //观察代数
-		int numberOfReplication = 1;      //重复次数
+		int populationSize = 500;         //population of hosts
+		int microSize = 1000;             //number of microbes in a single host
+		int numberOfSpecies = 150;        //OTUs of microbes
+		int numberOfGeneration = 10000;   //generation of host
+		int numberOfObservation = 100;    //log per generations
+		int numberOfReplication = 1;      //replications
 		double pctEnv = 0;                //环境占宿主微生物来源比例
 		double pctPool = 0;               //上一代宿主对环境组成的贡献
 
@@ -208,8 +208,7 @@ public class Microbiosima {
 								+ "environment_population_distance" + sufix)));
 
 				Population population = new Population(microSize, environment,
-						populationSize, pctEnv, pctPool, 0, 0);   //根据各种参数进行模拟
-                        //宿主体内微生物数量、环境中各otu占比、宿主种群数量、环境占宿主微生物来源比例、亲代对环境的贡献
+						populationSize, pctEnv, pctPool, 0, 0);   //params setting
 				while (population.getNumberOfGeneration() < numberOfGeneration) {
 					population.sumSpecies();
 					if (population.getNumberOfGeneration() % numberOfObservation == 0) {

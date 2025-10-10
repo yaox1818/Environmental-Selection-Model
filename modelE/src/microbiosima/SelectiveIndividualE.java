@@ -21,7 +21,7 @@ public class SelectiveIndividualE extends Individual {
     double[] hostFitnessRecordsK;
     double k;
 
-    public SelectiveIndividualE(Multinomial2 MultDist, int nomph, int noes, SelectiveSpeciesRegistry ssr, boolean HMS_or_TMS) {
+    public SelectiveIndividualE(Multinomial2 MultDist, int nomph, int noes, SelectiveSpeciesRegistry ssr, boolean HMS_or_TMS, boolean kIndex) {
         super(MultDist, nomph, noes);
         numOfMGenes=ssr.numOfTolGenes;
         microbeGenesFitnessInHost=new int[numOfMGenes];//此个体中微生物对所有特征的fitness
@@ -37,7 +37,12 @@ public class SelectiveIndividualE extends Individual {
 		}else microbeGenesFitnessInHost=ssr.mfrH;
 		hostGenesFitness=ssr.hfr;
         //k= Math.abs(MathUtil.getNextGaussian(parentalk[i]));
-        k= MathUtil.getNextFloat(1);
+        if (kIndex) {
+            k= MathUtil.getNextFloat(1);
+        } else {
+            k= 0.0;
+        }
+
         //k=MathUtil.getNextInt(10);
         //k=0;
         //k/=10;

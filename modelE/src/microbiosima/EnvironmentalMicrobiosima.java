@@ -45,7 +45,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
         double hsCoeff=1;
         boolean HMS_or_TMS=false;
         boolean kIndex=false;
-
+        long startTime = System.nanoTime();
 
 
         Options options = new Options();
@@ -303,6 +303,11 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
             }catch (IOException e) {
                 e.printStackTrace();
             }
+            long endTime = System.nanoTime();
+            long durationInNano = endTime - startTime;
+            double durationInSeconds = durationInNano / 1_000_000_000.0;
+
+            System.out.printf("Running time: %.2f seconds.%n", durationInSeconds);
         }
 
 

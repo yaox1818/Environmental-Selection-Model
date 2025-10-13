@@ -19,13 +19,7 @@ Under our neutral model, several parameters are adjustable:
    * [**Java 8**](https://www.java.com/)
 
 ### Install
-#### Option 1:
-Download `microbiosima_*.tar.gz` and uncompress it. Run it from terminal with
-```bash
-./bin/microbiosima
-```
 
-#### Option 2:
 Clone git repository and the jar file can be found under the `release` folder.
 Alternative, you can recompile it with [ant](http://ant.apache.org/).
 ```bash

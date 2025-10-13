@@ -37,7 +37,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
         int Ngene=25;//总共有25种可用trait
         int numberOfObservation=200;//5000
         int numberOfReplication=5;//5
-        double Ngenepm=5;//每种OTU微生物有5种trait
+        int Ngenepm=5;//每种OTU微生物有5种trait
         double pctEnv=0;//x=1-pctEnv,环境贡献
         double pctPool=0;//y 亲代对环境的贡献
         double msCoeffInHost=1;
@@ -162,7 +162,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 numberOfSpecies = Integer.parseInt(configs[2]);
                 numberOfGeneration = Integer.parseInt(configs[3]);
                 Ngene=Integer.parseInt(configs[4]);
-                Ngenepm=Double.parseDouble(configs[5]);
+                Ngenepm=Integer.parseInt(configs[5]);
                 if (Ngenepm>Ngene){
                     System.out.println(
                             "ERROR: number of traits per microbe must not be greater than number of total traits! EXIT");
@@ -194,6 +194,9 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 .append("\n\tNumber of total traits: ").append(Ngene)
                 .append("\n\tNumber of traits per microbe: ").append(Ngenepm)
                 .append("\n");
+        if (kIndex){
+            sb.append("\tUse RPP\n");
+        }
         System.out.println(sb.toString());
 
 
@@ -303,14 +306,14 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
             }catch (IOException e) {
                 e.printStackTrace();
             }
-            long endTime = System.nanoTime();
-            long durationInNano = endTime - startTime;
-            double durationInSeconds = durationInNano / 1_000_000_000.0;
 
-            System.out.printf("Running time: %.2f seconds.%n", durationInSeconds);
         }
 
+        long endTime = System.nanoTime();
+        long durationInNano = endTime - startTime;
+        double durationInSeconds = durationInNano / 1_000_000_000.0;
 
+        System.out.printf("Running time: %.2f seconds.%n", durationInSeconds);
 
     }
 

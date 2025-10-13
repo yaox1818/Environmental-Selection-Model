@@ -70,14 +70,14 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 .numberOfArgs(6).argName("Pop Micro Spec Gen")
                 .desc("Four Parameters in the following orders: "
                         + "(1) population size, (2) microbe size, (3) number of species, (4) number of generations, (5) number of total traits, (6)number of traits per microbe"
-                        + " [default: 500 1000 150 10000 10 5]");
+                        + " [default: 5000 1000000000 150 20000 25 5]");
         options.addOption(C.build());
 
         HelpFormatter formatter = new HelpFormatter();
         String syntax = "microbiosima pctEnv pctPool";
         String header = "\nSimulates the evolutionary and ecological dynamics of microbiomes within a population of hosts.\n\n"+
                 "required arguments:\n"+"  pctEnv             Percentage of environmental acquisition\n"+
-                "  pctPool            Percentage of pooled environmental component\n"+"  msCoeffInHost            Parameter related to microbe selection strength\n"+"  msCoeffInEnv            Parameter related to microbe selection strength\n"+
+                "  pctPool            Percentage of pooled environmental component\n"+"  msCoeffInHost            Parameter related to microbe selection strength in host\n"+"  msCoeffInEnv            Parameter related to microbe selection strength in environment\n"+
                 "  hsCoeff            Parameter related to host selection strength\n"+"  HMS_or_TMS         String HMS or TMS to specify host-mediated or trait-mediated microbe selection\n"
                 + "\noptional arguments:\n";
         String footer = "\n";

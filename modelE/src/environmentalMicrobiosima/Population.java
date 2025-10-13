@@ -18,7 +18,7 @@
  *******************************************************************************/
 
 
-package microbiosima;
+package environmentalMicrobiosima;
 
 import java.io.IOException;
 import java.util.ArrayList;

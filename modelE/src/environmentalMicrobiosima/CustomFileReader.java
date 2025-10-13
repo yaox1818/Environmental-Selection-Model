@@ -23,7 +23,7 @@
  * and open the template in the editor.
  */
 
-package microbiosima;
+package environmentalMicrobiosima;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

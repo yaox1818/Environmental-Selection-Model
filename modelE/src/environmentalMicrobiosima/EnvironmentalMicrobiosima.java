@@ -53,7 +53,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
         Option help = new Option("h", "help", false, "print this message");
         Option version = new Option("v", "version", false,
                 "print the version information and exit");
-        Option K = new Option("k", false, "use resource provisioning process");
+        Option K = new Option("k", "rpp",false, "use resource provisioning process");
         options.addOption(help);
         options.addOption(version);
         options.addOption(K);

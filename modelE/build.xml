@@ -13,7 +13,7 @@
     <property name="lib" location="lib"/>
     <property name="dist" location="${build}/dist"/>
 
-    <property name="main_class_microbiosima" value="microbiosima.Microbiosima"/>
+    <property name="main_class_environmental_microbiosima" value="microbiosima.EnvironmentalMicrobiosima"/>
 
     <path id="classpath">
         <fileset dir="${lib}" includes="**/*.jar"/>
@@ -52,15 +52,15 @@
     </target>
 
     <!-- make the *.jar -->
-    <target name="dist-all" depends="compile-all" description="create microbiosima.jar">
+    <target name="dist-all" depends="compile-all" description="create environmentalmicrobiosima.jar">
         <!-- Create the distribution directory -->
         <mkdir dir="${dist}"/>
 
         <!-- Put everything in ${build} into the microbiosima.jar file -->
-        <jar jarfile="${dist}/microbiosima.jar">
+        <jar jarfile="${dist}/environmental_microbiosima.jar">
             <manifest>
                 <attribute name="Built-By" value="${user.name}"/>
-                <attribute name="Main-Class" value="${main_class_microbiosima}"/>
+                <attribute name="Main-Class" value="${main_class_environmental_microbiosima}"/>
             </manifest>
             <fileset dir="${build}">
             	<include name="microbiosima/*.class"/>
@@ -78,12 +78,12 @@
     </target>
 
     <!-- run microbiosima.jar -->
-    <target name="run_microbiosima.jar">
-        <java jar="${dist}/microbiosima.jar" fork="true"/>
+    <target name="run_environmental_microbiosima.jar">
+        <java jar="${dist}/environmental_microbiosima.jar" fork="true"/>
     </target>
 
     <property name="release_dir" value="release"/>
-    <property name="Microbiosima_name" value="microbiosima_Java"/>
+    <property name="Environmental_Microbiosima_name" value="environmental_microbiosima_Java"/>
     
     <property name="common_dir" value="common"/>
 	
@@ -95,10 +95,10 @@
     <property name="Linux_package_dir" value="${Linux_dir}/${Microbiosima_name}_v${version}"/>
     <property name="Windows_package_dir" value="${Windows_dir}/${Microbiosima_name}_v${version}"/>
 -->
-    <property name="release_package_dir" value="${release_dir}/${Microbiosima_name}_v${version}"/>
+    <property name="release_package_dir" value="${release_dir}/${Environmental_Microbiosima_name}_v${version}"/>
 
     <target name="release" depends="build"
-            description="release for Microbiosima">
+            description="release for Environmental Microbiosima">
         <delete dir="${release_package_dir}"/>
         <!-- Create the release directory -->
         <mkdir dir="${release_package_dir}"/>
@@ -112,10 +112,10 @@
             <fileset dir="${common_dir}/doc"/>
         </copy>
 
-        <copy file="${dist}/microbiosima.jar" todir="${release_package_dir}/lib"/>
+        <copy file="${dist}/environmental_microbiosima.jar" todir="${release_package_dir}/lib"/>
 
         <!--<copy file="${common_dir}/README.md" todir="${release_package_dir}"/>-->
-        <tar destfile="${release_dir}/${Microbiosima_name}_v${version}.tgz" compression="gzip">
+        <tar destfile="${release_dir}/${Environmental_Microbiosima_name}_v${version}.tgz" compression="gzip">
             <tarfileset dir="${release_package_dir}"> 
                 <include name="lib/**" />
                 <include name="doc/**" />

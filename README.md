@@ -85,7 +85,7 @@ To run the simulation from terminal with twelve arguments taken.
 ##### Additional parameters
   - `--obs` Number generation for observation [default: 200]
   - `--rep`Number of replication [default: 5]
-  - `-k` Use resource provisioning process
+  - `--rpp` Use resource provisioning process
 
 
 

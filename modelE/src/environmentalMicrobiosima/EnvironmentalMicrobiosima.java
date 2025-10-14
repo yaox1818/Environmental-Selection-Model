@@ -21,8 +21,8 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
     /**
      * @param args
      *            the command line arguments
-     * @throws java.io.FileNotFoundException
-     * @throws java.io.UnsupportedEncodingException
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
      */
 
 
@@ -212,11 +212,17 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
         for (int rep=0;rep<numberOfReplication;rep++){
             String prefix = ""+(rep+1)+"_";
             String sufix;
-            if (HMS_or_TMS)
+            if (HMS_or_TMS) {
                 sufix = "_E" + pctEnv + "_P" + pctPool +"_HS"+hsCoeff+"_HMS"+ msCoeffInHost+"_EMS"+ msCoeffInEnv +".txt";
-            else
+            }
+            else {
                 sufix = "_E" + pctEnv + "_P" + pctPool +"_HS"+hsCoeff+"_TMS"+ msCoeffInHost+"_EMS"+ msCoeffInEnv +".txt";
-            System.out.println("Output 18 result files in the format of: "+prefix+"[****]" +sufix);
+            }
+            if (kIndex) {
+                System.out.println("Output 18 result files in the format of: "+prefix+"[****]" +sufix);
+            } else {
+                System.out.println("Output 17 result files in the format of: "+prefix+"[****]" +sufix);
+            }
             try{
                 PrintWriter file1= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"gamma_diversity"+sufix)),true);
                 PrintWriter file2= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"alpha_diversity"+sufix)),true);
@@ -230,7 +236,10 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 PrintWriter file10= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"microbiome_fitness_in_host_distribution"+sufix)),true);
                 PrintWriter file11= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"bacteria_contents"+sufix)),true);
                 PrintWriter file12= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"individual_bacteria_contents"+sufix)),true);
-                PrintWriter file13= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"k"+sufix)),true);
+                PrintWriter file13 = null;
+                if (kIndex){
+                    file13= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"k"+sufix)),true);
+                }
                 PrintWriter file14= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"alpha_diversity_in_env"+sufix)),true);
                 PrintWriter file15= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"environmental_bacteria_contents_for_host"+sufix)),true);
                 PrintWriter file16= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"environmental_bacteria_contents_for_env"+sufix)),true);
@@ -271,7 +280,9 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                         file10.println(population.printOutMFitnessInHost());//每种otu自身的fitness
                         file17.println(population.printOutMFitnessInEnvironment());//每种otu自身的fitness
                         file11.println(population.printBacteriaContents());
-                        file13.println(population.printk());
+                        if (kIndex) {
+                            file13.println(population.printk());
+                        }
                         file14.println(population.alphaDiversityInEnvironment());
                         file15.println(population.printBacteriaContentsInEnvForHost());
                         file16.println(population.printBacteriaContentsInEnv());
@@ -295,7 +306,9 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 file10.close();
                 file11.close();
                 file12.close();
-                file13.close();
+                if (kIndex) {
+                    file13.close();
+                }
                 file14.close();
                 file15.close();
                 file16.close();

@@ -18,7 +18,7 @@ Under our neutral model, several parameters are adjustable:
   12. number of total traits: the total number of available microbial traits.
   13. number of traits per microbe: the number of traits for each microbe.
   14. replication: the number of simulation with the same parameters you want to repeat.
-  15. resource provisioning process: hosts incur fitness costs to provide resources to recruit beneficial microbes and suppress harmful microbes.
+  15. resource provisioning process: hosts incur fitness costs to provide resources to recruit beneficial microbes and suppress harmful microbes(Reference: [Models of microbiome evolution incorporating host resource provisioning](https://academic.oup.com/ismecommun/article/5/1/ycaf059/8106546)).
 
 
 

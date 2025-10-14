@@ -86,9 +86,3 @@ To run the simulation from terminal with twelve arguments taken.
   - `--rep`Number of replication [default: 5]
   - `--rpp` Use resource provisioning process
 
-
-
-
-##Development
-
-Our selection and horizontal gene transfer (HGT) model are still under developing process.

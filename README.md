@@ -27,8 +27,7 @@ Under our neutral model, several parameters are adjustable:
 
 ### Install
 
-Clone git repository and the jar file can be found under the `release` folder.
-Alternative, you can recompile it with [ant](http://ant.apache.org/).
+Clone git repository and compile it with [ant](http://ant.apache.org/).
 ```bash
 cd Environmental-Selection-Model/modelE
 ant release

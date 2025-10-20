@@ -35,7 +35,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
         int numberOfSpecies=150;//Integer.parseInt(parameters[3]);
         int numberOfGeneration=20000;//200000
         int Ngene=25;//总共有25种可用trait
-        int numberOfObservation=200;//5000
+        int numberOfObservation=500;//5000
         int numberOfReplication=5;//5
         int Ngenepm=5;//每种OTU微生物有5种trait
         double pctEnv=0;//x=1-pctEnv,环境贡献

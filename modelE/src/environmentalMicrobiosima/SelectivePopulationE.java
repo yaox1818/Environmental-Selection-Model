@@ -193,10 +193,14 @@ public class SelectivePopulationE extends Population{
 		return sb.toString().trim();
 	}
     public String printOutMFitnessInEnvironment() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < numberOfIndividual; i++) {
-            sb.append(Math.pow(selSpReg.mscih,selSpReg.getTotalFitness(getIndividuals()[i].getMicrobiome(), microFitnessInEnv)-1)).append("\t");
+        double[] environmentalMicribiome;
+        if (getNumberOfGeneration() == 0){
+            environmentalMicribiome=initialEnvironment;
+        } else {
+            environmentalMicribiome=environmentalContribution;
         }
+        StringBuilder sb = new StringBuilder();
+        sb.append(Math.pow(selSpReg.mscih,selSpReg.getTotalFitness(environmentalMicribiome, microFitnessInEnv)-1)).append("\t");
         return sb.toString().trim();
     }
     public String printBacteriaContents() {

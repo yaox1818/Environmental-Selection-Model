@@ -67,7 +67,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
 
 
         Builder C = Option.builder("c").longOpt("config")
-                .numberOfArgs(6).argName("Pop Micro Spec Gen")
+                .numberOfArgs(6).argName("Pop Micro Spec Gen Tt Tpm")
                 .desc("Four Parameters in the following orders: "
                         + "(1) population size, (2) microbe size, (3) number of species, (4) number of generations, (5) number of total traits, (6)number of traits per microbe"
                         + " [default: 5000 1000000000 150 20000 25 5]");
@@ -219,9 +219,9 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 sufix = "_E" + pctEnv + "_P" + pctPool +"_HS"+hsCoeff+"_TMS"+ msCoeffInHost+"_EMS"+ msCoeffInEnv +".txt";
             }
             if (kIndex) {
-                System.out.println("Output 18 result files in the format of: "+prefix+"[****]" +sufix);
+                System.out.println("Output 19 result files in the format of: "+prefix+"[****]" +sufix);
             } else {
-                System.out.println("Output 17 result files in the format of: "+prefix+"[****]" +sufix);
+                System.out.println("Output 18 result files in the format of: "+prefix+"[****]" +sufix);
             }
             try{
                 PrintWriter file1= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"gamma_diversity"+sufix)),true);
@@ -241,9 +241,9 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                     file13= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"k"+sufix)),true);
                 }
                 PrintWriter file14= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"alpha_diversity_in_env"+sufix)),true);
-                PrintWriter file15= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"environmental_bacteria_contents_for_host"+sufix)),true);
-                PrintWriter file16= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"environmental_bacteria_contents_for_env"+sufix)),true);
-                PrintWriter file17= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"microbiome_fitness_in_environment_distribution"+sufix)),true);
+                PrintWriter file15= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"bacteria_contents_in_env_for_host"+sufix)),true);
+                PrintWriter file16= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"bacteria_contents_in_env_for_env"+sufix)),true);
+                PrintWriter file17= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"microbiome_fitness_in_env_distribution"+sufix)),true);
                 PrintWriter file18= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"beta_diversity_between_hosts_and_env"+sufix)),true);
                 PrintWriter file19= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"gamma_diversity_in_hosts_and_env"+sufix)),true);
                 for (int i=0;i<Ngene;i++){

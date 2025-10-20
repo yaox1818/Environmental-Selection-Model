@@ -200,7 +200,7 @@ public class SelectivePopulationE extends Population{
             environmentalMicribiome=environmentalContribution;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(Math.pow(selSpReg.mscih,selSpReg.getTotalFitness(environmentalMicribiome, microFitnessInEnv)-1)).append("\t");
+        sb.append(Math.pow(selSpReg.mscie,selSpReg.getTotalFitness(environmentalMicribiome, microFitnessInEnv)-1)).append("\t");
         return sb.toString().trim();
     }
     public String printBacteriaContents() {
@@ -329,25 +329,37 @@ public class SelectivePopulationE extends Population{
 
     public double[]  divideBacteriaForHost(){
         double[] bacteriaClass=new double[3];
+        double[] microbiome;
+        if (getNumberOfGeneration() == 0){
+            microbiome=initialEnvironment;
+        } else {
+            microbiome = environmentalContribution;
+        }
         for(int i=0;i<hostFitness.length;i++){
             if (hostFitness[i]<0)
-                bacteriaClass[0]+=environmentalContribution[i];
+                bacteriaClass[0]+=microbiome[i];
             else if (hostFitness[i]==0)
-                bacteriaClass[1]+=environmentalContribution[i];
+                bacteriaClass[1]+=microbiome[i];
             else
-                bacteriaClass[2]+=environmentalContribution[i];
+                bacteriaClass[2]+=microbiome[i];
         }
         return bacteriaClass;
     }
     public double[]  divideBacteria(){
         double[] bacteriaClass=new double[3];
+        double[] microbiome;
+        if (getNumberOfGeneration() == 0){
+            microbiome=initialEnvironment;
+        } else {
+            microbiome = environmentalContribution;
+        }
         for(int i=0;i<microFitnessInEnv.length;i++){
             if (microFitnessInEnv[i]<0)
-                bacteriaClass[0]+=environmentalContribution[i];
+                bacteriaClass[0]+=microbiome[i];
             else if (microFitnessInEnv[i]==0)
-                bacteriaClass[1]+=environmentalContribution[i];
+                bacteriaClass[1]+=microbiome[i];
             else
-                bacteriaClass[2]+=environmentalContribution[i];
+                bacteriaClass[2]+=microbiome[i];
         }
         return bacteriaClass;
     }

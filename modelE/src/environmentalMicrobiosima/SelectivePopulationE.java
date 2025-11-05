@@ -238,9 +238,8 @@ public class SelectivePopulationE extends Population{
         return a_diversityInEnvironment;
     }
 
-    public double BrayCurtisBetweenHostandEnv(boolean sampleOrNot) {
-        double coef0 = 2.0/2.0/(2.0-1.0);
-        double coef1 = 2.0/2.0/(2.0-1.0)/sampleReplicates;
+
+    public double BrayCurtisBetweenHostandEnv(boolean sampleOrNot){
         weighted_b_diversityInEnvironment=0;
         double[] environmentalMicribiome;
         if (getNumberOfGeneration() == 0){
@@ -249,8 +248,11 @@ public class SelectivePopulationE extends Population{
             environmentalMicribiome=environmentalContribution;
         }
         if (sampleOrNot){
-            weighted_b_diversityInEnvironment = DiversityIndex.BrayCurtis(microbiomeSum, environmentalMicribiome);
-            weighted_b_diversityInEnvironment*=coef0;
+            for (int i=0;i<numberOfIndividual;i++){
+                weighted_b_diversityInEnvironment += DiversityIndex.BrayCurtis(getMicrobiomeFreq(getIndividuals()[i].getMicrobiome()), environmentalMicribiome);
+            }
+
+            weighted_b_diversityInEnvironment/=numberOfIndividual;
         }
         else{
             double[] temp_microbiomesSum = new double[microbiomeSum.length];
@@ -263,39 +265,17 @@ public class SelectivePopulationE extends Population{
                 }
                 weighted_b_diversityInEnvironment += DiversityIndex.BrayCurtis(temp_microbiomesSum, environmentalMicribiome);
             }
-            weighted_b_diversityInEnvironment *= coef1;
+            weighted_b_diversityInEnvironment /= sampleReplicates;
         }
         return weighted_b_diversityInEnvironment;
     }
 
-    public double betaDiversityBetweenHostandEnv(boolean sampleOrNot) {
-        double coef0 = 2.0/2.0/(2.0-1.0);
-        double coef1 = 2.0/2.0/(2.0-1.0)/sampleReplicates;
-        weighted_b_diversityInEnvironment=0;
-        double[] environmentalMicribiome;
-        if (getNumberOfGeneration() == 0){
-            environmentalMicribiome=initialEnvironment;
-        } else {
-            environmentalMicribiome=environmentalContribution;
+    public double[] getMicrobiomeFreq(double[] microbiome){
+        double[] microbiomeFreq=new double[numberOfEnvironmentalSpecies];
+        for (int i=0;i<numberOfEnvironmentalSpecies;i++){
+            microbiomeFreq[i]=microbiome[i]/numberOfMicrobePerHost;
         }
-        if (sampleOrNot){
-            weighted_b_diversityInEnvironment = DiversityIndex.PiIndex(microbiomeSum, environmentalMicribiome);
-            weighted_b_diversityInEnvironment*=coef0;
-        }
-        else{
-            double[] temp_microbiomesSum = new double[numberOfEnvironmentalSpecies];
-            for (int index=0;index<sampleReplicates;index++){
-                double[][] temp_microbiomes=sample(index);
-                for (int i =0;i<temp_microbiomes.length;i++){
-                    for (int j=0;j<temp_microbiomes[i].length;j++){
-                        temp_microbiomesSum[j]+=temp_microbiomes[i][j];
-                    }
-                }
-                weighted_b_diversityInEnvironment += DiversityIndex.PiIndex(temp_microbiomesSum, environmentalMicribiome);
-            }
-            weighted_b_diversityInEnvironment *= coef1;
-        }
-        return weighted_b_diversityInEnvironment;
+        return microbiomeFreq;
     }
 
     public double gammaDiversityInEnvironmentandHosts(boolean sampleOrNot) {

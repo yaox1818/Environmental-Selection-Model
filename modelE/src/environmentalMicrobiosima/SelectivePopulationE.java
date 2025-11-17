@@ -369,6 +369,14 @@ public class SelectivePopulationE extends Population{
     public SelectiveSpeciesRegistry getSpeciesRegistry(){
         return selSpReg;
     }
+
+    public String printOutEnvSumMicrobiome() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < numberOfEnvironmentalSpecies; i++) {
+            sb.append(environmentalContribution[i]).append("\t");
+        }
+        return sb.toString().trim();
+    }
     
 }
     

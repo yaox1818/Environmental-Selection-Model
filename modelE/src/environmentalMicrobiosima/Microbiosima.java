@@ -216,7 +216,7 @@ public class Microbiosima {
 						file3.print(population.betaDiversity(true));
 						file3.print("\t");
 						file3.println(population.BrayCurtis(true));
-						file4.println(population.printOut());
+						file4.println(population.printOutHostsSumMicrobiome());
 						file5.println(population.interGenerationDistance());
 						file6.println(population.environmentPopulationDistance());
 					}

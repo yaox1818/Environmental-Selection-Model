@@ -318,7 +318,7 @@ public class Population {
             return weighted_b_diversity;
     }
 
-	public String printOut() {
+	public String printOutHostsSumMicrobiome() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < numberOfEnvironmentalSpecies; i++) {
 			sb.append(microbiomeSum[i]).append("\t");

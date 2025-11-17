@@ -219,15 +219,15 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 sufix = "_E" + pctEnv + "_P" + pctPool +"_HS"+hsCoeff+"_TMS"+ msCoeffInHost+"_EMS"+ msCoeffInEnv +".txt";
             }
             if (kIndex) {
-                System.out.println("Output 19 result files in the format of: "+prefix+"[****]" +sufix);
+                System.out.println("Output 20 result files in the format of: "+prefix+"[****]" +sufix);
             } else {
-                System.out.println("Output 18 result files in the format of: "+prefix+"[****]" +sufix);
+                System.out.println("Output 19 result files in the format of: "+prefix+"[****]" +sufix);
             }
             try{
                 PrintWriter file1= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"gamma_diversity"+sufix)),true);
                 PrintWriter file2= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"alpha_diversity"+sufix)),true);
                 PrintWriter file3= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"beta_diversity"+sufix)),true);
-                PrintWriter file4= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"sum"+sufix)),true);
+                PrintWriter file4= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"hostsSum"+sufix)),true);
                 PrintWriter file5= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"inter_generation_distance"+sufix)),true);
                 PrintWriter file6= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"environment_population_distance"+sufix)), true);
                 PrintWriter file7= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"host_fitness"+sufix)),true);
@@ -246,6 +246,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 PrintWriter file17= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"microbiome_fitness_in_env_distribution"+sufix)),true);
                 PrintWriter file18= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"beta_diversity_between_hosts_and_env"+sufix)),true);
                 PrintWriter file19= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"gamma_diversity_in_hosts_and_env"+sufix)),true);
+                PrintWriter file20= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"envSum"+sufix)),true);
                 for (int i=0;i<Ngene;i++){
                     fitnessToMicrobeInHost[i]=MathUtil.getNextInt(2)-1;//随机分配微生物的25种性状数值-1、0、1.
                     fitnessToMicrobeInEnv[i]=MathUtil.getNextInt(2)-1;//随机分配微生物的25种性状数值-1、0、1.
@@ -269,7 +270,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                         //file3.print(population.betaDiversity(true));
                         //file3.print("\t");
                         file3.println(population.BrayCurtis(true));
-                        file4.println(population.printOut());//微生物distribution，每种OTU的占比
+                        file4.println(population.printOutHostsSumMicrobiome());//微生物distribution，每种OTU的占比
                         file5.println(population.interGenerationDistance());
                         file6.println(population.environmentPopulationDistance());
                         file7.print(population.averageHostFitness());//宿主平均适应度
@@ -288,6 +289,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                         file16.println(population.printBacteriaContentsInEnv());
                         file18.println(population.BrayCurtisBetweenHostandEnv(true));
                         file19.println(population.gammaDiversityInEnvironmentandHosts(true));
+                        file20.println(population.printOutHostsSumMicrobiome());
                     }
                     population.getNextGen();
                 }
@@ -315,6 +317,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 file17.close();
                 file18.close();
                 file19.close();
+                file20.close();
 
             }catch (IOException e) {
                 e.printStackTrace();

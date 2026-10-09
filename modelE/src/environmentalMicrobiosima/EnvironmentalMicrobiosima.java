@@ -38,8 +38,8 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
         int numberOfObservation=500;//5000
         int numberOfReplication=5;//5
         int Ngenepm=5;//每种OTU微生物有5种trait
-        double pctEnv=0;//x=1-pctEnv,环境贡献
-        double pctPool=0;//y 亲代对环境的贡献
+        double pctEnv=0;//x=1-pctEnv,环境贡献 PI = 1 - pctEnv = 1 - E
+        double pctPool=0;//y 亲代对环境的贡献 PE = pctPool = P
         double msCoeffInHost=1;
         double msCoeffInEnv=1;
         double hsCoeff=1;
@@ -219,9 +219,9 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 sufix = "_E" + pctEnv + "_P" + pctPool +"_HS"+hsCoeff+"_TMS"+ msCoeffInHost+"_EMS"+ msCoeffInEnv +".txt";
             }
             if (kIndex) {
-                System.out.println("Output 20 result files in the format of: "+prefix+"[****]" +sufix);
+                System.out.println("Output 21 result files in the format of: "+prefix+"[****]" +sufix);
             } else {
-                System.out.println("Output 19 result files in the format of: "+prefix+"[****]" +sufix);
+                System.out.println("Output 20 result files in the format of: "+prefix+"[****]" +sufix);
             }
             try{
                 PrintWriter file1= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"gamma_diversity"+sufix)),true);
@@ -247,6 +247,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 PrintWriter file18= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"beta_diversity_between_hosts_and_env"+sufix)),true);
                 PrintWriter file19= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"gamma_diversity_in_hosts_and_env"+sufix)),true);
                 PrintWriter file20= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"envSum"+sufix)),true);
+                PrintWriter file21= new PrintWriter(new BufferedWriter(new FileWriter(prefix+"jaccard_between_hosts_and_env"+sufix)),true);
                 for (int i=0;i<Ngene;i++){
                     fitnessToMicrobeInHost[i]=MathUtil.getNextInt(2)-1;//随机分配微生物的25种性状数值-1、0、1.
                     fitnessToMicrobeInEnv[i]=MathUtil.getNextInt(2)-1;//随机分配微生物的25种性状数值-1、0、1.
@@ -289,7 +290,8 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                         file16.println(population.printBacteriaContentsInEnv());
                         file18.println(population.BrayCurtisBetweenHostandEnv(true));
                         file19.println(population.gammaDiversityInEnvironmentandHosts(true));
-                        file20.println(population.printOutHostsSumMicrobiome());
+                        file20.println(population.printOutEnvSumMicrobiome());
+                        file21.println(population.JaccardBetweenHostandEnv(true));
                     }
                     population.getNextGen();
                 }
@@ -318,7 +320,7 @@ public class EnvironmentalMicrobiosima extends Microbiosima {
                 file18.close();
                 file19.close();
                 file20.close();
-
+                file21.close();
             }catch (IOException e) {
                 e.printStackTrace();
             }

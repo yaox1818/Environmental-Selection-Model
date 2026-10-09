@@ -270,6 +270,36 @@ public class SelectivePopulationE extends Population{
         return weighted_b_diversityInEnvironment;
     }
 
+    public double JaccardBetweenHostandEnv(boolean sampleOrNot){
+        weighted_b_diversityInEnvironment=0;
+        double[] environmentalMicribiome;
+        if (getNumberOfGeneration() == 0){
+            environmentalMicribiome=initialEnvironment;
+        } else {
+            environmentalMicribiome=environmentalContribution;
+        }
+        if (sampleOrNot){
+            for (int i=0;i<numberOfIndividual;i++){
+                weighted_b_diversityInEnvironment += DiversityIndex.JaccardIndex(getMicrobiomeFreq(getIndividuals()[i].getMicrobiome()), environmentalMicribiome);
+            }weighted_b_diversityInEnvironment/=numberOfIndividual;
+        }
+        else{
+            double[] temp_microbiomesSum = new double[microbiomeSum.length];
+            for (int index=0;index<sampleReplicates;index++){
+                double[][] temp_microbiomes=sample(index);
+                for (int i =0;i<temp_microbiomes.length;i++){
+                    for (int j=0;j<temp_microbiomes[i].length;j++){
+                        temp_microbiomesSum[j]+=temp_microbiomes[i][j];
+                    }
+                }
+                weighted_b_diversityInEnvironment += DiversityIndex.JaccardIndex(temp_microbiomesSum, environmentalMicribiome);
+            }
+            weighted_b_diversityInEnvironment /= sampleReplicates;
+        }
+        return weighted_b_diversityInEnvironment;
+    }
+
+
     public double[] getMicrobiomeFreq(double[] microbiome){
         double[] microbiomeFreq=new double[numberOfEnvironmentalSpecies];
         for (int i=0;i<numberOfEnvironmentalSpecies;i++){
@@ -372,8 +402,14 @@ public class SelectivePopulationE extends Population{
 
     public String printOutEnvSumMicrobiome() {
         StringBuilder sb = new StringBuilder();
+        double[] environmentalMicribiome;
+        if (getNumberOfGeneration() == 0){
+            environmentalMicribiome=initialEnvironment;
+        } else {
+            environmentalMicribiome=environmentalContribution;
+        }
         for (int i = 0; i < numberOfEnvironmentalSpecies; i++) {
-            sb.append(environmentalContribution[i]).append("\t");
+            sb.append(environmentalMicribiome[i]).append("\t");
         }
         return sb.toString().trim();
     }
